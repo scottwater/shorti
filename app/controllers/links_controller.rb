@@ -1,5 +1,5 @@
 class LinksController < ApplicationController
-  before_action :verify_access
+  before_action :verify_access, only: :create
 
   def index
     render json: {message: "Welcome to Shorti!"}
