@@ -7,7 +7,8 @@ class Link < ApplicationRecord
   end
 
   def share_url(root_url)
-    "#{root_url}#{share_id}"
+    cleaned_url = URI.parse(root_url).tap {|uri| uri.query = nil}.to_s
+    "#{cleaned_url}#{share_id}"
   end
 
   def self.get_by_share_id(share_id)

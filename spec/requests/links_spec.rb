@@ -34,6 +34,13 @@ RSpec.describe "The LINKS API!", type: :request do
       post "/", params: {url: "https://scottw.com", api_key: "ABC"}
       expect(response).to have_http_status(:created)
     end
+
+    it "will return a clean url to share (no API KEY)" do
+      ENV["SHORTI_API_KEY"] = "ABC"
+      post "/?api_key=ABC", params: {url: "https://scottw.com"}
+
+      expect(json["url"]).to eql("http://www.example.com/#{json["id"]}")
+    end
   end
 
   describe "with an existing link" do
