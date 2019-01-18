@@ -80,6 +80,6 @@ test:
 #
 production:
   <<: *default
-  database: shorti_production
-  username: shorti
-  password: <%= ENV['SHORTI_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
+  pool: 10
+  prepared_statements: false
