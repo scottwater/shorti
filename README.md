@@ -2,7 +2,7 @@
 
 Shorti is an API first (and only) URL shortener and click counter.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?env[SHORTI_API_KEY]=add_your_own_api_key)
 
 It is comprised of three end points.
 
