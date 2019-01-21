@@ -41,3 +41,7 @@ I have a version up on Heroku you can try (URL won't be that short).
 ```
 
 Please note, this data will likely be cleared out every once in a while.
+
+## Todo
+
+One outstanding item would be to track unique clicks (likely via IP Address). Not 100% yet if this will be added.
