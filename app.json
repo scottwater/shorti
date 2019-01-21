@@ -1,0 +1,6 @@
+{
+  "name": "Shorti",
+  "description": "A simple ruby URL shortener and click counter",
+  "repository": "https://github.com/scottwater/shorti",
+  "keywords": ["ruby", "rails", "url shortner"]
+}
