@@ -4,6 +4,7 @@ RSpec.describe "The LINKS API!", type: :request do
   after(:each) do
     ENV["SHORTI_API_KEY"] = nil
     ENV["SHORTI_BASE_URL"] = nil
+    ENV["SHORT_INFO_API_KEY"] = nil
   end
 
   describe "creating new links" do
@@ -62,6 +63,25 @@ RSpec.describe "The LINKS API!", type: :request do
       get "/#{link.share_id}"
       link.reload
       expect(link.counter).to eql(1)
+    end
+
+    it "will show the info about the link" do 
+      get "/info/#{link.share_id}" 
+      expect(json["url"]).to eql("http://www.example.com/#{link.share_id}")
+    end
+
+    it "will return an error if the API Key is required" do 
+      ENV["SHORTI_INFO_API_KEY"] = "Y"
+      ENV["SHORTI_API_KEY"] = "NO"
+      get "/info/#{link.share_id}" 
+      expect(json["error"]).to eql("Invalid API Key")
+    end
+
+    it "will return the info with a valid API Key" do 
+      ENV["SHORTI_INFO_API_KEY"] = "Y"
+      ENV["SHORTI_API_KEY"] = "YES"
+      get "/info/#{link.share_id}", params: {api_key: "YES"}
+      expect(json["url"]).to eql("http://www.example.com/#{link.share_id}")
     end
   end
 

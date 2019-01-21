@@ -6,9 +6,9 @@ class Link < ApplicationRecord
     Base32::Crockford.encode(id)
   end
 
-  def share_url(root_url)
-    cleaned_url = URI.parse(root_url).tap {|uri| uri.query = nil}.to_s
-    "#{cleaned_url}#{share_id}"
+  def share_url(base_url)
+    uri = URI.parse(base_url)
+    "#{uri.scheme}://#{uri.host}/#{share_id}"
   end
 
   def self.get_by_share_id(share_id)

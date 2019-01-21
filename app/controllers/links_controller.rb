@@ -1,5 +1,5 @@
 class LinksController < ApplicationController
-  before_action :verify_access, only: :create
+  before_action :verify_access, only: [:create, :show]
 
   def index
     render json: {message: "Welcome to Shorti!"}
@@ -11,21 +11,32 @@ class LinksController < ApplicationController
     link.title = params[:title]
     link.description = params[:description]
     if link.save
-      render json: {id: link.share_id, url: link.share_url(ENV.fetch("SHORTI_BASE_URL", request.url))}, status: :created
+      render json: {id: link.share_id, url: link.share_url(base_share_url)}, status: :created
     else
       render json: {error: "Your link could not be created"}, status: :unauthorized
     end
   end
 
-  def show
+  def redirect
     if (link = Link.get_by_share_id(params[:share_id]))
       link.counter += 1
       link.save
-      if params[:info]
-        render json: {id: link.share_id, counter: link.counter, title: link.title, description: link.description}
-      else
-        redirect_to link.url, status: :moved_permanently
-      end
+      redirect_to link.url, status: :moved_permanently
+    else
+      render json: {error: "No URL is available for #{params[:share_id]}"}, status: :not_found
+    end
+  end
+
+  def show
+    if (link = Link.get_by_share_id(params[:share_id]))
+        data = { 
+          id: link.share_id, 
+          counter: link.counter, 
+          title: link.title, 
+          description: link.description,
+          url: link.share_url(base_share_url)
+        }
+      render json: data
     else
       render json: {error: "No URL is available for #{params[:share_id]}"}, status: :not_found
     end
@@ -33,8 +44,12 @@ class LinksController < ApplicationController
 
   private
 
+  def base_share_url
+    ENV.fetch("SHORTI_BASE_URL", request.url)
+  end
+
   def verify_access
-    if Rails.env.production?
+    if Rails.env.production? || params[:action] == 'show' && ENV["SHORT_INFO_API_KEY"].present?
       verify_api_key!
     elsif ENV["SHORTI_API_KEY"].present? || params[:api_key].present?
       verify_api_key!
