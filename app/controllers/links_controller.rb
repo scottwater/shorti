@@ -23,7 +23,7 @@ class LinksController < ApplicationController
       link.save
       redirect_to link.url, status: :moved_permanently
     else
-      render json: {error: "No URL is available for #{params[:share_id]}"}, status: :not_found
+      render plain: "Sorry, the URL you requested could not be found"
     end
   end
 

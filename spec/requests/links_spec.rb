@@ -87,6 +87,6 @@ RSpec.describe "The LINKS API!", type: :request do
 
   it "will return a 404 for links that do not exist" do
     get "/MISSING"
-    expect(response).to have_http_status(:not_found)
+    expect(response.body).to match(/sorry/i) 
   end
 end
