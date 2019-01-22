@@ -23,7 +23,7 @@ class LinksController < ApplicationController
       link.save
       redirect_to link.url, status: :moved_permanently
     else
-      render plain: "Sorry, the URL you requested could not be found"
+      render plain: "Sorry, the URL you requested could not be found", status: :not_found
     end
   end
 
