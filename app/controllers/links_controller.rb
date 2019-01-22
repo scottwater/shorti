@@ -48,8 +48,12 @@ class LinksController < ApplicationController
     ENV.fetch("SHORTI_BASE_URL", request.url)
   end
 
+  def require_api_key_for_info?
+    params[:action] == 'show' && ENV["SHORT_INFO_API_KEY"].present?
+  end
+
   def verify_access
-    if Rails.env.production? || params[:action] == 'show' && ENV["SHORT_INFO_API_KEY"].present?
+    if Rails.env.production? || require_api_key_for_info?
       verify_api_key!
     elsif ENV["SHORTI_API_KEY"].present? || params[:api_key].present?
       verify_api_key!
