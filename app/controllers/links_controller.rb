@@ -13,7 +13,8 @@ class LinksController < ApplicationController
     if link.save
       render json: {id: link.share_id, url: link.share_url(base_share_url)}, status: :created
     else
-      render json: {error: "Your link could not be created"}, status: :unauthorized
+      error = link.errors.any? ? link.errors.full_messages.join(", ") : "Unknown error"
+      render json: {error: error}, status: :unprocessable_entity
     end
   end
 
