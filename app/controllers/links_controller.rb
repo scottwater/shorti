@@ -2,8 +2,12 @@ class LinksController < ApplicationController
   before_action :verify_access, only: [:create, :show]
 
   def index
-    render json: {message: "Welcome to Shorti!"}
-  end
+    if is_json_request?
+      render json: {message: "Welcome to Shorti!"}
+    else 
+      render plain: "Welcome to Shorti" 
+    end
+  end 
 
   def create
     link = Link.new
@@ -11,7 +15,11 @@ class LinksController < ApplicationController
     link.title = params[:title]
     link.description = params[:description]
     if link.save
-      render json: {id: link.share_id, url: link.share_url(base_share_url)}, status: :created
+      if is_json_request? 
+        render json: {id: link.share_id, url: link.share_url(base_share_url)}, status: :created
+      else 
+        render plain: link.share_url(base_share_url), status: :created
+      end 
     else
       error = link.errors.any? ? link.errors.full_messages.join(", ") : "Unknown error"
       render json: {error: error}, status: :unprocessable_entity
@@ -37,13 +45,26 @@ class LinksController < ApplicationController
           description: link.description,
           url: link.share_url(base_share_url)
         }
-      render json: data
+        if is_json_request? 
+          render json: data
+        else
+          render plain: data.map {|k,v| "#{k}: #{v}"}.join("\n")
+        end
     else
-      render json: {error: "No URL is available for #{params[:share_id]}"}, status: :not_found
+      error_message = "No URL is available for #{params[:share_id]}"
+      if is_json_request? 
+        render json: {error: error_message}, status: :not_found
+      else
+        render plain: error_message, status: :not_found
+      end
     end
   end
 
   private
+
+  def is_json_request? 
+    request.accept == "application/json"
+  end
 
   def base_share_url
     ENV.fetch("SHORTI_BASE_URL", request.url)
