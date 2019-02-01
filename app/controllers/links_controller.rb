@@ -22,7 +22,11 @@ class LinksController < ApplicationController
       end 
     else
       error = link.errors.any? ? link.errors.full_messages.join(", ") : "Unknown error"
-      render json: {error: error}, status: :unprocessable_entity
+      if is_json_request? 
+        render json: {error: error}, status: :unprocessable_entity
+      else
+        render plain: error, status: :unprocessable_entity
+      end
     end
   end
 

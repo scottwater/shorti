@@ -14,14 +14,14 @@ RSpec.describe "The LINKS API!", type: :request do
     end
 
     it "will return unprocessable_entity if the link is not valid" do
-      post "/", params: {url: "scottw.com"}
+      post "/", params: {url: "scottw.com"}, headers: {"HTTP_ACCEPT" => "application/json"}
       expect(response).to have_http_status(:unprocessable_entity)
       expect(json["error"]).to match(/Invalid Host/)
     end
 
     it "will add a new link with a custom URL" do
       ENV["SHORTI_BASE_URL"] = "https://shorti.shorti/"
-      post "/", params: {url: "https://scottw.com"}, headers: {"HTTP_ACCEPT" => 'application/json'}
+      post "/", params: {url: "https://scottw.com"}, headers: {"HTTP_ACCEPT" => "application/json"}
       expect(json["url"]).to match("https://shorti.shorti/#{json["id"]}")
     end
 
