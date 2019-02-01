@@ -47,3 +47,7 @@ Please note, this data will likely be cleared out every once in a while.
 ## Todo
 
 One outstanding item would be to track unique clicks (likely via IP Address). Not 100% yet if this will be added.
+
+# Change Log
+
+1. If HTTP_ACCEPT = 'application/json' json data will be returned. Otherwise, responses will be return as plain text.
