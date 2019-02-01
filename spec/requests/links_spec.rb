@@ -21,13 +21,13 @@ RSpec.describe "The LINKS API!", type: :request do
 
     it "will reject requests with an invalid API KEY" do
       post "/", params: {url: "https://scottw.com", api_key: "ABC"}
-      expect(response).to have_http_status(:conflict)
+      expect(response).to have_http_status(:unauthorized)
     end
 
     it "will reject requests with an invalid API KEY" do
       ENV["SHORTI_API_KEY"] = "ABC"
       post "/", params: {url: "https://scottw.com"}
-      expect(response).to have_http_status(:conflict)
+      expect(response).to have_http_status(:unauthorized)
     end
 
     it "will add a new link with a valid API KEY" do

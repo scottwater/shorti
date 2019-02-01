@@ -62,7 +62,7 @@ class LinksController < ApplicationController
 
   def verify_api_key!
     unless ENV["SHORTI_API_KEY"].present? && ENV["SHORTI_API_KEY"] == params[:api_key]
-      render json: {error: "Invalid API Key"}, status: :conflict
+      render json: {error: "Invalid API Key"}, status: :unauthorized
     end
   end
 end
