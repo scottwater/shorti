@@ -2,5 +2,17 @@
   "name": "Shorti",
   "description": "A simple ruby URL shortener and click counter",
   "repository": "https://github.com/scottwater/shorti",
-  "keywords": ["ruby", "rails", "url shortner"]
+  "keywords": ["ruby", "rails", "url shortner"],
+  "website": "https://scottw.com/shorti",
+  "success_url": "/",
+  "env": {
+    "SHORTI_API_KEY": {
+      "description": "a secret key used to access the api",
+      "generator": "secret"
+    },
+    "SHORT_INFO_API_KEY": {
+      "description": "if this key exists, the /info end point will request an api_key",
+      "value": "true"
+    }
+  }
 }
