@@ -44,7 +44,7 @@ RSpec.describe "The LINKS API!", type: :request do
 
     it "will return a clean url to share (no API KEY)" do
       ENV["SHORTI_API_KEY"] = "ABC"
-      post "/?api_key=ABC", params: {url: "https://scottw.com"}, headers: {"HTTP_ACCEPT" => 'application/json'}
+      post "/?api_key=ABC", params: {url: "https://scottw.com"}, headers: {"HTTP_ACCEPT" => "application/json"}
 
       expect(json["url"]).to eql("http://www.example.com/#{json["id"]}")
     end
@@ -71,19 +71,19 @@ RSpec.describe "The LINKS API!", type: :request do
       expect(link.counter).to eql(1)
     end
 
-    it "will show the info about the link" do 
+    it "will show the info about the link" do
       get "/info/#{link.share_id}", headers: {"HTTP_ACCEPT" => "application/json"}
       expect(json["url"]).to eql("http://www.example.com/#{link.share_id}")
     end
 
-    it "will return an error if the API Key is required" do 
+    it "will return an error if the API Key is required" do
       ENV["SHORTI_INFO_API_KEY"] = "Y"
       ENV["SHORTI_API_KEY"] = "NO"
-      get "/info/#{link.share_id}" 
+      get "/info/#{link.share_id}"
       expect(json["error"]).to eql("Invalid API Key")
     end
 
-    it "will return the info with a valid API Key" do 
+    it "will return the info with a valid API Key" do
       ENV["SHORTI_INFO_API_KEY"] = "Y"
       ENV["SHORTI_API_KEY"] = "YES"
       get "/info/#{link.share_id}", params: {api_key: "YES"}
@@ -95,8 +95,8 @@ RSpec.describe "The LINKS API!", type: :request do
     get "/MISSING"
 
     expect(response).to have_attributes(
-      body: match(/sorry/i), 
-      status: 404 
+      body: match(/sorry/i),
+      status: 404
     )
   end
 end
